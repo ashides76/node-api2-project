@@ -88,11 +88,80 @@ router.put('/:id', (req, res) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({
-                message: "There was an error while saving the post to the database"
+                message: "The post information could not be modified"
             })
         })
     }
 })
-// router.put('/:id', async (req, res) => {})
+
+//[DELETE] /api/posts/:id
+//try 1: 
+// router.delete('/:id', async (req, res) => {
+//     const { id } = req.params
+//     await Post.findById(id)
+//     .then(post => {
+//         console.log('post:', post)
+//         if(!post) {
+//             res.status(404).json({
+//                 message: "The post with the specified ID does not exist"
+//             })
+//         } else {
+//              Post.remove(post)
+//             .then (post => {
+//                 res.status(200).json(post)
+//             })
+//             .ctach(err => {
+//                 console.log(err)
+//             })
+//         }
+//     })
+//     .catch(err => {
+//         console.log(err)
+//         res.status(500).json({
+//             message: "The post could not be removed"
+//         })
+//     })
+// })
+
+//try 2:
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    const postById = await Post.findById(id)
+    await Post.remove(id)
+        .then(post => {
+            if (!post) {
+                res.status(404).json({
+                    message: "The post with the specified ID does not exist"
+                })
+            } else {
+                return res.json(postById)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                message: "The post with the specified ID does not exist"
+            })
+        })
+})
+
+//try 3:
+// router.delete('/:id', async (req, res) => {
+//     try{
+//         const checkID = await Post.findById(req.params.id)
+//         if (!checkID) {
+//             res.status(404).json({
+//                 message: "The post with the specified ID does not exist"
+//             })
+//         } else {
+//             await Post.remove(req.params.id)
+//             res.json(checkID)
+//         }
+//     } catch(err) {
+//         res.status(500).json({
+//             message: "The post information could not be modified"
+//         })
+//     }
+// })
 
 module.exports = router
