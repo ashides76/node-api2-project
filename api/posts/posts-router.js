@@ -169,7 +169,7 @@ router.delete('/:id', async (req, res) => {
 // router.get('/:id/comments', async (req, res) => {
 //     const { id } = req.params
 //     // const checkId = await Post.findById(req.params.id)
-//     await Post.findCommentById(id)
+//     await Post.findPostComments(id)
 //     .then(post => {
 //         if (!post) {
 //             res.status(404).json({
@@ -197,7 +197,7 @@ router.get('/:id/comments', async (req, res) => {
                 message: "The post with the specified ID does not exist"
             })
         } else {
-            const messages = await Post.findCommentById(id)
+            const messages = await Post.findPostComments(id)
             res.json(messages)
         }
     } catch (err) {
